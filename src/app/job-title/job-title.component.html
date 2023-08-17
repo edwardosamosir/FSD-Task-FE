@@ -1,0 +1,35 @@
+<div style="margin: auto; width: 70%;">
+    <h2>Job Titles</h2>
+    <dx-button style="float: right; margin-bottom: 10px;" icon="add" (onClick)="addRow()">
+    </dx-button>
+    <dx-data-grid 
+        style="display: inline-block;" 
+        #gridContainer 
+        id="gridContainer" 
+        width="auto" 
+        keyExpr="id" 
+        edito
+        [dataSource]="jobTitles" 
+        [showBorders]="true"
+    >
+        <dxi-column caption="Code" dataField="code" alignment="center" cssClass="middle-content"
+            width="100"></dxi-column>
+        <dxi-column caption="Name" dataField="name" alignment="center" cssClass="middle-content"></dxi-column>
+        <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
+            <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
+                <dx-button hint="Save" [visible]='t.row.isEditing' icon="save" [disabled]="false" (onClick)="save(t, t.row.data.id ? false : true)">
+                </dx-button>
+                <dx-button hint="Cancel" [visible]='t.row.isEditing' icon="undo" [disabled]="false"
+                    (onClick)="cancel()">
+                </dx-button>
+
+                <dx-button hint="Edit" [visible]="!t.row.isEditing" [disabled]="false" (onClick)='edit(t.data)'
+                    icon="edit">
+                </dx-button>
+                <dx-button hint="Delete" [visible]="!t.row.isEditing " [disabled]="false" (onClick)='delete(t.data)'
+                    icon="remove">
+                </dx-button>
+            </div>
+        </dxi-column>
+    </dx-data-grid>
+</div>
