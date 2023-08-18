@@ -34,7 +34,7 @@
                 [disabled]="false" (onClick)='edit(t.data)' icon="edit">
             </dx-button>
             <dx-button hint="Delete" [visible]="!t.row.isEditing "
-                [disabled]="false" (onClick)='delete(t.data)' icon="remove">
+                [disabled]="t.data.isUsed" (onClick)='delete(t.data)' icon="remove">
             </dx-button>
         </div>
     </dxi-column>

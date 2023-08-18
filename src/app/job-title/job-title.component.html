@@ -26,7 +26,7 @@
                 <dx-button hint="Edit" [visible]="!t.row.isEditing" [disabled]="false" (onClick)='edit(t.data)'
                     icon="edit">
                 </dx-button>
-                <dx-button hint="Delete" [visible]="!t.row.isEditing " [disabled]="false" (onClick)='delete(t.data)'
+                <dx-button hint="Delete" [visible]="!t.row.isEditing" [disabled]="t.data.isUsed" (onClick)='delete(t.data)'
                     icon="remove">
                 </dx-button>
             </div>

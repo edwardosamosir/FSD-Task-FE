@@ -12,7 +12,7 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) { }
 
-  getemployees(): Observable<IEmployeeApiResponse>{
+  getEmployees(): Observable<IEmployeeApiResponse>{
     return this.http.get<IEmployeeApiResponse>(this.employeeUrl)
   }
 

@@ -39,7 +39,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   fetchEmployees(): void{
-    this._employeeService.getemployees()
+    this._employeeService.getEmployees()
       .subscribe(
         (response: IEmployeeApiResponse) =>{
           this.employees = response.data

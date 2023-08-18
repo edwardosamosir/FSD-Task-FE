@@ -4,6 +4,9 @@ import { IJobPosition, IJobPositionCreateUpdate, IJobPostionApiResponse } from '
 import { JobPositionService } from '../services/job-position.service';
 import { IJobTitle, IJobTitleApiResponse } from '../Interfaces/job-title.interface';
 import { JobTitleService } from '../services/job-title.service';
+import { switchMap } from 'rxjs/operators';
+import { EmployeeService } from '../services/employee.service';
+import { IEmployeeApiResponse } from '../Interfaces/employee.interface';
 
 @Component({
   selector: 'app-job-position',
@@ -14,11 +17,14 @@ export class JobPositionComponent implements OnInit {
 
   constructor(
     private _jobPositionService: JobPositionService,
-    private _jobTitleService: JobTitleService
+    private _jobTitleService: JobTitleService,
+    private _employeeService: EmployeeService
   ) { }
 
   public jobPositions: IJobPosition[] = []
   public jobTitles: IJobTitle[] = []
+  public usedJobPositions: Map<number, boolean> = new Map();
+
 
   customJobTitleTemplate: any;
 
@@ -32,16 +38,37 @@ export class JobPositionComponent implements OnInit {
     this.fetchJobTitles()
   }
   
-
-
   fetchJobPositions(): void {
-    this._jobPositionService.getJobPositions()
-      .subscribe(
-        (response: IJobPostionApiResponse) => {
-          this.jobPositions = response.data
-        }
-      )
-  }
+    this._employeeService.getEmployees() 
+        .pipe(
+            switchMap((employeeResponse: IEmployeeApiResponse) => {
+                employeeResponse.data.forEach((employee) => {
+                    if (employee.jobPosition && employee.jobPosition.id) {
+                        this.usedJobPositions.set(employee.jobPosition.id, true);
+                    }
+                });
+                return this._jobPositionService.getJobPositions();
+            })
+        )
+        .subscribe((response: IJobPostionApiResponse) => {
+            this.jobPositions = response.data.map((position) => {
+                return {
+                    ...position,
+                    isUsed: this.usedJobPositions.has(position.id),
+                };
+            });
+        });
+}
+
+
+  // fetchJobPositions(): void {
+  //   this._jobPositionService.getJobPositions()
+  //     .subscribe(
+  //       (response: IJobPostionApiResponse) => {
+  //         this.jobPositions = response.data
+  //       }
+  //     )
+  // }
 
   fetchJobTitles(): void {
     this._jobTitleService.getJobTitles()
