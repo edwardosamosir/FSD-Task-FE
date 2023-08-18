@@ -1,0 +1,44 @@
+<div style="margin: auto; width: 70%;">    
+    <h2>Employees</h2>
+    <dx-button style="float: right; margin-bottom: 10px;" icon="add"
+        (onClick)="addRow()">
+
+    </dx-button>
+    <dx-data-grid 
+    style="display: inline-block;"
+    #gridContainer
+    id="gridContainer"
+    width="auto"
+    keyExpr="id"
+    edito
+    [dataSource]="employees" [showBorders]="true">
+    <dxi-column caption="Nama" dataField="name" alignment="center" cssClass="middle-content" width="200"></dxi-column>
+    <dxi-column caption="Employee NIK" dataField="employeeNumber" alignment="center" cssClass="middle-content" width="200"></dxi-column>
+    <dxi-column caption="Alamat" dataField="address" alignment="center" cssClass="middle-content"></dxi-column>    
+    <dxi-column dataField="jobPosition.id" [cellTemplate]="customJobPositionTemplate" caption="Job Position" alignment="center" cssClass="middle-content" dataType="number">
+        <dxo-lookup
+          [dataSource]="jobPositions"
+          valueExpr="id"
+          [displayExpr]="getCustomJobPositionOptions"
+        ></dxo-lookup>
+      </dxi-column>
+    <dxi-column caption="Job Title" [cellTemplate]="customJobTitleTemplate" alignment="center" cssClass="middle-content"></dxi-column>
+    <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
+        <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
+            <dx-button hint="Save" [visible]='t.row.isEditing' icon="save"
+                [disabled]="false" (onClick)="save(t, t.row.data.id ? false : true)">
+            </dx-button>
+            <dx-button hint="Cancel" [visible]='t.row.isEditing' icon="undo"
+                [disabled]="false"(onClick)="cancel()">
+            </dx-button>
+
+            <dx-button hint="Edit" [visible]="!t.row.isEditing"
+                [disabled]="false" (onClick)='edit(t.data)' icon="edit">
+            </dx-button>
+            <dx-button hint="Delete" [visible]="!t.row.isEditing "
+                [disabled]="false" (onClick)='delete(t.data)' icon="remove">
+            </dx-button>
+        </div>
+    </dxi-column>
+    </dx-data-grid>
+</div>
